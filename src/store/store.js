@@ -6,6 +6,7 @@ const authStore = reactive({
     apiBase: 'http://localhost:8000',
     isAuthenticated: localStorage.getItem('auth') == 1,
     user: JSON.parse(localStorage.getItem('user')),
+    errors: null,
     async fetchPublicApi(endPoint = "", params = {}, requestType = "GET") {
         let request = {
             method: requestType.toUpperCase(),
@@ -54,7 +55,23 @@ const authStore = reactive({
                     authStore.user = res.data
                     localStorage.setItem('auth', 1)
                     localStorage.setItem('user', JSON.stringify(res.data))
-                    router.push('/')
+
+                    if ('admin' == res.data.type) {
+                        router.push('/admin')
+                    } else {
+                        router.push('/')
+                    }
+                }
+            });
+    },
+    register(name, email, password) {
+        authStore.fetchPublicApi('/api/register', { name: name, email: email, password: password }, 'POST')
+            .then(res => {
+                if (res.status) {
+                    authStore.errors = null;
+                    router.push('/login');
+                }else {
+                    authStore.errors = res.errors;
                 }
             });
     },
@@ -69,7 +86,10 @@ const authStore = reactive({
         router.push('/login')
     },
     getUserToken() {
-        return authStore.user.accessToken
+        return authStore.user.accessToken;
+    },
+    getUserType() {
+        return authStore.user.type;
     }
 })
 

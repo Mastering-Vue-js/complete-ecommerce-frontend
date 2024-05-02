@@ -6,6 +6,7 @@ const auth = authStore;
 </script>
 <template>
   <section class="mt-[40px] text-white p-5">
+    <p class="pb-5">Customer</p>
     <ul class="flex flex-col space-y-5">
       <li>
         <router-link to="/">Home</router-link>
@@ -39,6 +40,9 @@ const auth = authStore;
 
       <li v-if="!auth.isAuthenticated">
         <router-link to="/login">Login</router-link>
+      </li>
+      <li v-if="!auth.isAuthenticated">
+        <router-link to="/register">Register</router-link>
       </li>
     </ul>
   </section>

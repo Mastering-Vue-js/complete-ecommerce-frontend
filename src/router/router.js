@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../components/Home.vue'
+import adminHome from '../components/admin/Home.vue';
+import adminSidebar from '../components/admin/Sidebar.vue';
 import About from '../components/About.vue'
 import Contact from '../components/Contact.vue'
 import Products from '../components/Products.vue'
@@ -7,11 +9,11 @@ import Product from '../components/Product.vue'
 import Sidebar from '../components/Sidebar.vue'
 import Protected from '../components/Protected.vue'
 import Login from '../components/Login.vue'
-import {authStore} from '../store/store'
+import Register from '../components/Register.vue';
+import { authStore } from '../store/store'
 import Cart from '../components/Cart.vue'
 import Orders from '../components/Orders.vue'
 
-import Admin from '../components/Admin.vue'
 import Editor from '../components/Editor.vue'
 
 const routes = [
@@ -22,8 +24,24 @@ const routes = [
         }
     },
     {
+        path: '/admin', components: {
+            default: adminHome,
+            LeftSideBar: adminSidebar
+        },
+        meta: {
+            requiresAuth: true,
+            type: 'admin',
+        }
+    },
+    {
         path: '/login', components: {
             default: Login,
+            LeftSideBar: Sidebar
+        }
+    },
+    {
+        path: '/register', components: {
+            default: Register,
             LeftSideBar: Sidebar
         }
     },
@@ -34,20 +52,11 @@ const routes = [
         }
     },
     {
-        path: '/admin', components: {
-            default: Admin,
-            LeftSideBar: Sidebar
-        },
-        meta:{
-            requiresAuth: true,
-        }
-    },
-    {
         path: '/editor', components: {
             default: Editor,
             LeftSideBar: Sidebar
         },
-        meta:{
+        meta: {
             requiresAuth: true,
         }
     },
@@ -83,11 +92,11 @@ const routes = [
         name: 'product',
     },
     {
-        path: '/protected', components: {   
+        path: '/protected', components: {
             default: Protected,
             LeftSideBar: Sidebar,
         },
-        meta:{
+        meta: {
             requiresAuth: true
         }
     }
@@ -103,9 +112,11 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    if(to.meta.requiresAuth && !authStore.isAuthenticated){
+    if (to.meta.requiresAuth && !authStore.isAuthenticated) {
         next('/login')
-    }else{
+    }else if (to.meta.requiresAuth && to.meta.type != authStore.getUserType()) {
+        next('/')
+    }else {
         next()
     }
 })
