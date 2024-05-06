@@ -11,14 +11,6 @@ const categoryData = reactive({
     image: ''
 });
 
-const getCategories = () => {
-    const res = authStore.fetchProtectedApi('/api/categories', {}, 'GET');
-    res.then(response => {
-        data.categories = response.data;
-    });
-}
-getCategories();
-
 const deleteCategory = (index, item) => {
     const res = authStore.fetchProtectedApi('/api/admin/categories/delete/' + item.id, {}, 'DELETE');
     res.then(response => {
