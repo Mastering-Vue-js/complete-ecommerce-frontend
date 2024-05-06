@@ -1,7 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../components/Home.vue'
+import adminMain from '../components/admin/Main.vue';
 import adminHome from '../components/admin/Home.vue';
 import adminSidebar from '../components/admin/Sidebar.vue';
+import adminProduct from '../components/admin/Products.vue';
+import adminCategories from '../components/admin/Categories.vue';
+import adminEditProduct from '../components/admin/EditProducts.vue';
+
+import Home from '../components/Home.vue'
 import About from '../components/About.vue'
 import Contact from '../components/Contact.vue'
 import Products from '../components/Products.vue'
@@ -24,14 +29,37 @@ const routes = [
         }
     },
     {
-        path: '/admin', components: {
-            default: adminHome,
-            LeftSideBar: adminSidebar
+        path: '/admin',
+        components: {
+            default: adminMain,
+            LeftSideBar: adminSidebar,
         },
         meta: {
             requiresAuth: true,
             type: 'admin',
-        }
+        },
+        children: [
+            {
+                path: '', components: {
+                    default: adminHome
+                }
+            },
+            {
+                path: 'products', components: {
+                    default: adminProduct
+                }
+            },
+            {
+                path: 'categories', components: {
+                    default: adminCategories
+                }
+            },
+            {
+                path: 'products/:id', components: {
+                    default: adminEditProduct
+                },
+            },
+        ]
     },
     {
         path: '/login', components: {
@@ -114,9 +142,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth && !authStore.isAuthenticated) {
         next('/login')
-    }else if (to.meta.requiresAuth && to.meta.type != authStore.getUserType()) {
+    } else if (to.meta.requiresAuth && to.meta.type != authStore.getUserType()) {
         next('/')
-    }else {
+    } else {
         next()
     }
 })

@@ -2,6 +2,7 @@ import { ref, reactive } from 'vue'
 import router from '../router/router'
 import { cart } from './cart'
 import { wishlist } from './wishlist'
+import axios from 'axios';
 const authStore = reactive({
     apiBase: 'http://localhost:8000',
     isAuthenticated: localStorage.getItem('auth') == 1,
@@ -47,6 +48,20 @@ const authStore = reactive({
         const response = await res.json();
         return response;
     },
+    async uploadProtectedApi(endPoint = "", params = {}) {
+        const token = authStore.getUserToken()
+
+        const res = await axios.post(authStore.apiBase + endPoint, params, {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type": "multipart/form-data",
+                'Authorization': `Bearer ${token}`,
+            }
+        });
+
+        const response = await res.data;
+        return response;
+    },
     authenticate(username, password) {
         authStore.fetchPublicApi('/api/login', { email: username, password }, 'POST')
             .then(res => {
@@ -70,7 +85,7 @@ const authStore = reactive({
                 if (res.status) {
                     authStore.errors = null;
                     router.push('/login');
-                }else {
+                } else {
                     authStore.errors = res.errors;
                 }
             });

@@ -12,11 +12,14 @@ const auth = authStore;
         <router-link to="/admin">Home</router-link>
       </li>
       <li>
-        <router-link to="/products">Products</router-link>
+        <router-link to="/admin/products">Products</router-link>
       </li>
-      <li v-if="auth.isAuthenticated">
+      <li>
+        <router-link to="/admin/categories">Categories</router-link>
+      </li>
+      <!-- <li v-if="auth.isAuthenticated">
         <router-link to="/orders">Orders </router-link>
-      </li>
+      </li> -->
     </ul>
   </section>
 </template>
