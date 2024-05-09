@@ -10,8 +10,8 @@ import { authStore } from "../store/store";
 const products = ref([]);
 onBeforeMount(() => {
   const res = authStore.fetchPublicApi("/api/products", {}, "GET");
-  res.then((data) => {
-    products.value = data;
+  res.then((response) => {
+    products.value = response.data;
     if(authStore.isAuthenticated) {
       wishlist.fetchWishlist();
     }
@@ -34,15 +34,15 @@ onBeforeMount(() => {
             class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80"
           >
             <img
-              :src="product.image"
-              class="h-full w-full object-cover object-center lg:h-full lg:w-full"
+              :src="authStore.apiBase + '/' + product.image"
+              class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80"
             />
           </div>
           <div class="mt-4 flex justify-between">
             <div>
               <h3 class="text-sm text-gray-700">
                 <router-link :to="`/products/${product.id}`">{{
-                  product.title
+                  product.name
                 }}</router-link>
               </h3>
             </div>
@@ -57,7 +57,7 @@ onBeforeMount(() => {
             >
               Add To Cart
             </button>
-            <WishListIcon :product="product" v-if="authStore.isAuthenticated" />
+            <!-- <WishListIcon :product="product" v-if="authStore.isAuthenticated" /> -->
           </div>
         </div>
       </div>

@@ -70,7 +70,8 @@ const selectFile = (event) => {
                     <div>
                         <label class="block mb-2 text-sm font-medium text-gray-900 ">Category</label>
                         <select v-model="productData.category_id">
-                            <option v-for="(item, index) in data.categories" :key="index" :value="item.id"> {{ item.name }}</option>
+                            <option v-for="(item, index) in data.categories" :key="index" :value="item.id"> {{ item.name
+                                }}</option>
                         </select>
                     </div>
                     <div>
@@ -93,8 +94,8 @@ const selectFile = (event) => {
                     </p>
                     <p class="w-[100px]">{{ item.category.name }}</p>
                     <p class="w-[100px]">{{ item.description }}</p>
-                    <button @click="editProduct(index, item)"
-                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</button>
+                    <router-link :to="`/admin/products/${item.id}`"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</router-link>
                     <button @click="deleteProduct(index, item)"
                         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Delete</button>
                 </div>
