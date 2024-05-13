@@ -1,37 +1,25 @@
 import { reactive } from 'vue'
 import { authStore } from './store'
-import { cart } from './cart'
+import { data } from './data';
+import { cart } from './cart';
+
 const order = reactive({
     orders: [],
-    async fetchOrders() {
-        const res = authStore.fetchProtectedApi('/api/orders');
+    fetchOrders() {
+        const res = data.fetchProtectedApi('/api/orders', {}, 'GET');
         res.then(response => {
-            this.orders = response.map(order => {
-                return {
-                    toggleProducts: false,
-                    ...order,
-                }
-            });
-            this.orders.reverse();
+            this.orders = response.data;
         })
     },
-    async placeOrder(totalPrice, items) {
-        const products = Object.values(items).map(item => {
-            return {
-                product_id: item.product.id,
-                quantity: item.quantity,
-                price: item.product.price
-            }
-        });
-
-        const params = {
-            total_amount: totalPrice,
-            products: products
-        }
-
-        const res = authStore.fetchProtectedApi('/api/orders', params, 'POST');
+    async placeOrder(checkoutData) {
+        const res = data.fetchProtectedApi('/api/orders/add', checkoutData, 'POST');
         res.then(response => {
-            cart.emptyCart();
+            if (response.status) {
+                cart.emptyCart();
+                return true;
+            } else {
+                return false;
+            }
         });
     }
 })

@@ -15,8 +15,10 @@ import { cart } from "../store/cart";
               </router-link>
             </p>
             <p class="w-[100px]">${{ item.product.price }}</p>
-            <p>
-              <input type="number" v-model="item.quantity" />
+            <p class="flex">
+              <button @click="cart.updateCart('minus', item, index)" class="ml-2 mr-2 pointer bg-gray-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">-</button>
+              <input class="w-[50px]" type="number" v-model="item.quantity" />
+              <button @click="cart.updateCart('plus', item, index)" class="ml-2 pointer bg-gray-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">+</button>
             </p>
             <button @click="cart.deleteCartItem(item, index)"
               class="ml-5 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
@@ -32,15 +34,12 @@ import { cart } from "../store/cart";
             <strong>${{ cart.totalPrice }}</strong>
           </p>
         </div>
-        <button @click="cart.saveCartInLocalStorage()"
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          Update Cart
-        </button>
-
+<!-- 
         <button @click="cart.checkout()"
           class="ml-5 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-          Place Order
-        </button>
+          Checkout
+        </button> -->
+        <router-link class="ml-5 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" to="/checkout">Checkout</router-link>
       </div>
     </div>
   </div>

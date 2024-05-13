@@ -31,12 +31,41 @@ const cart = reactive({
             }
         })
     },
-    removeItem(product) { },
+    emptyCart() {
+        this.items = {};
+        // this.totalCartItems = 0;
+        // this.totalPrice = 0;
+    },
     deleteCartItem(item, index) {
         const res = data.fetchProtectedApi(`/api/cart/delete/${item.id}`, {}, 'DELETE');
         res.then(response => {
             if (response.status) {
                 this.items.splice(index, 1);
+            }
+        });
+    },
+    updateCart(status, item, index) {
+        const params = { cart_id: item.id }
+
+        if(status == 'plus') {
+            this.items[index].quantity = this.items[index].quantity+1;
+            params.quantity = this.items[index].quantity;
+        } else {
+            if(this.items[index].quantity == 1) {
+                // this.deleteCartItem(item, index);
+                alert('You can not decrease quantity less than 1');
+                return;
+            } else {
+                this.items[index].quantity = this.items[index].quantity-1;
+                params.quantity = this.items[index].quantity;
+            }
+        }
+
+        const res = data.fetchProtectedApi(`/api/cart/update`, params, 'POST');
+        res.then(response => {
+            if (response.status) {
+                this.items[index].quantity = response.data.quantity;
+                this.items[index].total = response.data.total;
             }
         });
     },
@@ -49,9 +78,6 @@ const cart = reactive({
             this.items = response.data
         })
     },
-    checkout() {
-        order.placeOrder(this.totalPrice, this.items)
-    }
 })
 cart.getCartFromLocalStorage()
 export { cart }

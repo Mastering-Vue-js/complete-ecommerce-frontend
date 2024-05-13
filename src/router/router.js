@@ -17,6 +17,7 @@ import Login from '../components/Login.vue'
 import Register from '../components/Register.vue';
 import { authStore } from '../store/store'
 import Cart from '../components/Cart.vue'
+import Checkout from '../components/Checkout.vue';
 import Orders from '../components/Orders.vue'
 
 import Editor from '../components/Editor.vue'
@@ -103,6 +104,12 @@ const routes = [
     {
         path: '/cart', components: {
             default: Cart,
+            LeftSideBar: Sidebar
+        }
+    },
+    {
+        path: '/checkout', components: {
+            default: Checkout,
             LeftSideBar: Sidebar
         }
     },
