@@ -104,6 +104,9 @@ const data = reactive({
     },
     getUserType() {
         return data.user.type;
+    },
+    ucFirst(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
     }
 });
 

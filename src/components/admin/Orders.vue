@@ -1,11 +1,10 @@
 <script setup>
 import { onBeforeMount, ref } from "vue";
-import { order } from "../store/order";
-import { authStore } from "../store/store";
-import { data } from "../store/data";
+import { order } from "../../store/order";
+import { data } from "../../store/data";
 
 onBeforeMount(() => {
-  order.fetchOrders();
+  order.fetchAdminOrders();
 });
 
 const toggleOrderId = ref(null);
@@ -28,11 +27,15 @@ const calculateTotal = (products) => {
         <div class="order-info flex justify-between w-full">
           <p class="w-1/3"><strong>Order ID:</strong> {{ order.id }}</p>
           <p class="w-1/3"><strong>Total Amount:</strong> ${{ calculateTotal(order.products) }}</p>
-          <p class="w-1/3"><strong>Address:</strong> Name: {{ order.name }}, Phone: {{ order.phone }}, Email: {{
-        order.email }}</p>
+          <!-- <p class="w-1/3"><strong>Address:</strong> Name: {{ order.name }}, Phone: {{ order.phone }}, Email: {{
+        order.email }}</p> -->
+          <p class="w-1/3"><strong>Customer:</strong> {{ order.user.name }}</p>
           <p class="w-1/3"><strong>Payment Method:</strong> {{ order.payment_method }}</p>
           <p class="w-1/3"><strong>Status:</strong> {{ data.ucFirst(order.status) }}</p>
           <p class="w-1/3"><strong>Note:</strong> {{ order.notes }}</p>
+          <p class="text-right w-1/3">
+            <router-link :to="`/admin/orders/${order.id}`" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</router-link>
+          </p>
           <p class="text-right w-1/3">
             <button @click="toggleOrderId = order.id"
               class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">

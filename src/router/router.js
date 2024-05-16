@@ -5,6 +5,8 @@ import adminSidebar from '../components/admin/Sidebar.vue';
 import adminProduct from '../components/admin/Products.vue';
 import adminCategories from '../components/admin/Categories.vue';
 import adminEditProduct from '../components/admin/EditProducts.vue';
+import adminOrders from '../components/admin/Orders.vue';
+import adminEditOrder from '../components/admin/EditOrder.vue';
 
 import Home from '../components/Home.vue'
 import About from '../components/About.vue'
@@ -59,6 +61,16 @@ const routes = [
                 path: 'products/:id', components: {
                     default: adminEditProduct
                 },
+            },
+            {
+                path: 'orders', components: {
+                    default: adminOrders
+                }
+            },
+            {
+                path: 'orders/:id', components: {
+                    default: adminEditOrder
+                }
             },
         ]
     },

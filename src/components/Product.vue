@@ -4,35 +4,27 @@ import { useRoute } from "vue-router";
 import { ref, reactive, onBeforeMount } from "vue";
 import { cart } from "../store/cart";
 import { authStore } from "../store/store";
+import { data } from "../store/data";
 const route = useRoute();
 const id = route.params.id;
 // const product = reactive({});
-const product = ref({});
+const product = ref(null);
 const comments = ref([]);
 onBeforeMount(() => {
-  const res = authStore.fetchPublicApi(`/api/products/${id}`, {}, "GET");
-  res.then((data) => {
-    // product.id = data.id;
-    // product.title = data.title;
-    // product.price = data.price;
-    // product.description = data.description;
-    // product.category = data.category;
-    // product.image = data.image;
-    // product.rating = data.rating;
-    // product.rating_count = data.rating_count;
-    product.value = data;
+  const res = data.fetchPublicApi(`/api/products/${id}`, {}, "GET");
+  res.then((response) => {
+    product.value = response.data;
   });
 });
 </script>
 <template>
-  <article class="mb-10">
+  <article class="mb-10" v-if="product != null">
     <h1 class="text-xl mb-2">
-      {{ product.title }}
+      {{ product.name }}
     </h1>
-    <p>
-      <img class="w-60" :src="product.image" alt="" />
-      {{ product.description }}
-    </p>
+    <img class="w-60" :src="authStore.apiBase + '/' + product.image" alt="" />
+    <p> Category: {{ product.category.name }} </p>
+    <p>{{ product.description }}</p>
     <p>Price: ${{ product.price }}</p>
     <p>
       <button

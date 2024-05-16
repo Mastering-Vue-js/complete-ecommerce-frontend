@@ -17,6 +17,9 @@ const auth = authStore;
       <li>
         <router-link to="/admin/categories">Categories</router-link>
       </li>
+      <li>
+        <router-link to="/admin/orders">Orders</router-link>
+      </li>
       <!-- <li v-if="auth.isAuthenticated">
         <router-link to="/orders">Orders </router-link>
       </li> -->

@@ -11,6 +11,12 @@ const order = reactive({
             this.orders = response.data;
         })
     },
+    fetchAdminOrders() {
+        const res = data.fetchProtectedApi('/api/admin/orders', {}, 'GET');
+        res.then(response => {
+            this.orders = response.data;
+        })
+    },
     async placeOrder(checkoutData) {
         const res = data.fetchProtectedApi('/api/orders/add', checkoutData, 'POST');
         res.then(response => {
