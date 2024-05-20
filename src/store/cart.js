@@ -2,7 +2,7 @@ import { reactive, computed } from 'vue'
 import { order } from './order'
 import { data } from './data';
 const cart = reactive({
-    items: {},
+    items: [],
     totalCartItems: computed(() => {
         let total = 0
         for (let id in cart.items) {
@@ -32,7 +32,7 @@ const cart = reactive({
         })
     },
     emptyCart() {
-        this.items = {};
+        this.items = [];
         // this.totalCartItems = 0;
         // this.totalPrice = 0;
     },
@@ -72,12 +72,12 @@ const cart = reactive({
     saveCartInLocalStorage() {
         localStorage.setItem('cart', JSON.stringify(this.items))
     },
-    getCartFromLocalStorage() {
+    getCartFromBackend() {
         const res = data.fetchProtectedApi('/api/cart');
         res.then(response => {
             this.items = response.data
         })
     },
 })
-cart.getCartFromLocalStorage()
+cart.getCartFromBackend()
 export { cart }

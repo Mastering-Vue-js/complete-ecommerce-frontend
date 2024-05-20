@@ -7,6 +7,7 @@ import adminCategories from '../components/admin/Categories.vue';
 import adminEditProduct from '../components/admin/EditProducts.vue';
 import adminOrders from '../components/admin/Orders.vue';
 import adminEditOrder from '../components/admin/EditOrder.vue';
+import adminCoupon from '../components/admin/Coupon.vue';
 
 import Home from '../components/Home.vue'
 import About from '../components/About.vue'
@@ -61,6 +62,11 @@ const routes = [
                 path: 'products/:id', components: {
                     default: adminEditProduct
                 },
+            },
+            {
+                path: 'coupon', components: {
+                    default: adminCoupon
+                }
             },
             {
                 path: 'orders', components: {

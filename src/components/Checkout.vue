@@ -3,6 +3,7 @@ import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { data } from '../store/data';
 import { order } from "../store/order";
+import { cart } from "../store/cart";
 
 const countries = reactive([
     {
@@ -48,9 +49,12 @@ const checkout = reactive({
     line2: 'Sylhet Gas line',
     country: 'Bangladesh',
     city: 'Sylhet',
+    coupon: '',
     notes: 'This is order note',
     payment_method: 'cod',
 });
+
+const couponData = ref(null);
 
 const renderCities = () => {
     selectedCountryIdx.value = countries.findIndex(country => country.name === checkout.country);
@@ -59,17 +63,41 @@ const renderCities = () => {
 const createOrder = () => {
     const status = order.placeOrder(checkout);
 
-    if(status){
+    if (status) {
         router.push('/orders');
     } else {
-        alert('Order failed');  
+        alert('Order failed');
     }
+};
+
+const checkoutTotal = () => {
+    if (couponData.value != null) {
+        if (couponData.value.type === 'percentage') {
+            return cart.totalPrice - (cart.totalPrice * couponData.value.discount / 100);
+        } else {
+            return cart.totalPrice - couponData.value.discount;
+        }
+    } else {
+        return cart.totalPrice;
+    }
+}
+
+const applyCoupon = () => {
+    const res = data.fetchProtectedApi(`/api/verify-coupon`, { code: checkout.coupon }, 'POST');
+    res.then(response => {
+        if (response.status) {
+            couponData.value = response.data;
+        } else {
+            alert('Invalid coupon');
+            couponData.value = null;
+        }
+    });
 };
 
 </script>
 
 <template>
-    <div class="bg-white">
+    <div class="bg-white" v-if="cart.items.length > 0">
         <div class="mx-auto px-12 py-8">
             <h2 class="text-2xl font-bold tracking-tight text-gray-900">Checkout </h2>
             <div>
@@ -108,7 +136,7 @@ const createOrder = () => {
                         <label class="block mb-2 text-sm font-medium text-gray-900 ">Country</label>
                         <select v-model="checkout.country" @change="renderCities()">
                             <option v-for="(country, index) in countries" :key="index" :value="country.name"> {{
-                            country.name }} </option>
+        country.name }} </option>
                         </select>
                     </div>
                     <div>
@@ -116,7 +144,7 @@ const createOrder = () => {
                         <select v-model="checkout.city">
                             <option v-for="(city, index) in countries[ selectedCountryIdx ].cities" :key="index"
                                 :value="city"> {{
-                            city }} </option>
+        city }} </option>
                         </select>
                     </div>
                     <div>
@@ -131,6 +159,31 @@ const createOrder = () => {
                             <option value="cod">Cash on Delivery</option>
                             <option value="paypal">Paypal</option>
                         </select>
+                    </div>
+                </div>
+
+                <div class="flex gap-5 py-6">
+                    <div class="w-1/2">
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-gray-900 ">Coupon Code</label>
+                            <input v-model="checkout.coupon"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                                placeholder="Coupon" required="">
+                        </div>
+                        <button @click="applyCoupon()"
+                            class="ml-5 mt-5 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                            Apply Coupon
+                        </button>
+                    </div>
+                    <div class="w-1/2">
+                        <h3>Checkout Summary</h3>
+                        <p v-for="item in cart.items"> {{ item.product.name }} x {{ item.quantity }} = {{
+        item.product.price * item.quantity }} </p>
+                        <hr>
+                        <p>Subtotal = {{ cart.totalPrice }}</p>
+                        <p> Discount = {{ cart.totalPrice - checkoutTotal() }}</p>
+                        <hr>
+                        <p> Total = {{ checkoutTotal() }}</p>
                     </div>
                 </div>
 

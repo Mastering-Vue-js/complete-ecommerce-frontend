@@ -23,11 +23,11 @@ const calculateTotal = (products) => {
       <p class="my-10"></p>
     </div>
     <div class="px-12 py-8">
-      <!-- <p>{{ order.orders }}</p> -->
       <div class="my-2" v-for="order in order.orders" :key="order.id">
         <div class="order-info flex justify-between w-full">
           <p class="w-1/3"><strong>Order ID:</strong> {{ order.id }}</p>
-          <p class="w-1/3"><strong>Total Amount:</strong> ${{ calculateTotal(order.products) }}</p>
+          <p class="w-1/3" v-if="order.coupon != null"><strong>Coupon:</strong> {{ order.coupon }}</p>
+          <p class="w-1/3"><strong>Total Amount:</strong> ${{ order.total }}</p>
           <p class="w-1/3"><strong>Address:</strong> Name: {{ order.name }}, Phone: {{ order.phone }}, Email: {{
         order.email }}</p>
           <p class="w-1/3"><strong>Payment Method:</strong> {{ order.payment_method }}</p>

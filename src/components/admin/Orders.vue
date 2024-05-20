@@ -26,7 +26,8 @@ const calculateTotal = (products) => {
       <div class="my-2" v-for="order in order.orders" :key="order.id">
         <div class="order-info flex justify-between w-full">
           <p class="w-1/3"><strong>Order ID:</strong> {{ order.id }}</p>
-          <p class="w-1/3"><strong>Total Amount:</strong> ${{ calculateTotal(order.products) }}</p>
+          <p class="w-1/3" v-if="order.coupon != null"><strong>Coupon:</strong> {{ order.coupon }}</p>
+          <p class="w-1/3"><strong>Total Amount:</strong> ${{ order.total }}</p>
           <!-- <p class="w-1/3"><strong>Address:</strong> Name: {{ order.name }}, Phone: {{ order.phone }}, Email: {{
         order.email }}</p> -->
           <p class="w-1/3"><strong>Customer:</strong> {{ order.user.name }}</p>
@@ -34,7 +35,8 @@ const calculateTotal = (products) => {
           <p class="w-1/3"><strong>Status:</strong> {{ data.ucFirst(order.status) }}</p>
           <p class="w-1/3"><strong>Note:</strong> {{ order.notes }}</p>
           <p class="text-right w-1/3">
-            <router-link :to="`/admin/orders/${order.id}`" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</router-link>
+            <router-link :to="`/admin/orders/${order.id}`"
+              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</router-link>
           </p>
           <p class="text-right w-1/3">
             <button @click="toggleOrderId = order.id"
