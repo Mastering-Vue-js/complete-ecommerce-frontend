@@ -4,7 +4,7 @@ import { cart } from './cart'
 import { wishlist } from './wishlist'
 import axios from 'axios';
 const authStore = reactive({
-    apiBase: 'http://localhost:8000',
+    apiBase: import.meta.env.VITE_API_BASE,
     isAuthenticated: localStorage.getItem('auth') == 1,
     user: JSON.parse(localStorage.getItem('user')),
     errors: null,

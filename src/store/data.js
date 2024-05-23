@@ -3,7 +3,7 @@ import { reactive } from "vue";
 const data = reactive({
     categories: null,
     products: null,
-    apiBase: 'http://localhost:8000',
+    apiBase: import.meta.env.VITE_API_BASE,
     isAuthenticated: localStorage.getItem('auth') == 1,
     user: JSON.parse(localStorage.getItem('user')),
     errors: null,
